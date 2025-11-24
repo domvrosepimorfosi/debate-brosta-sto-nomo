@@ -1,0 +1,2225 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8">
+  <title>Μπροστά στο νόμο – Δομημένη Συζήτηση</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --bg: #f5f2e9;
+      --card-bg: #fdfaf4;
+      --accent: #37474f;
+      --accent-soft: #cfd8dc;
+      --accent-alt: #b71c1c;
+      --text-main: #222222;
+      --text-muted: #555555;
+      --border: #d6cdc0;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #fff8e1 0, #f5f2e9 40%, #e8e3d5 100%);
+      color: var(--text-main);
+    }
+
+    header {
+      padding: 1.2rem 1rem 0.3rem;
+      text-align: center;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .site-logo {
+      height: 52px;
+      width: auto;
+    }
+
+    header h1 {
+      margin: 0.2rem 0;
+      font-size: 1.7rem;
+      color: var(--accent);
+    }
+
+    header p {
+      margin: 0.2rem 0 0.4rem;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      text-align: center;
+      width: 100%;
+    }
+
+    main {
+      max-width: 950px;
+      margin: 0 auto 2rem;
+      padding: 0 1rem 2rem;
+    }
+
+    .step-indicator {
+      display: flex;
+      justify-content: center;
+      gap: 0.4rem;
+      margin: 0.3rem 0 1rem;
+      flex-wrap: wrap;
+    }
+
+    .step-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #b0bec5;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .step-dot.active {
+      background: var(--accent);
+      transform: scale(1.2);
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.4rem 1.3rem;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
+      border: 1px solid var(--border);
+      margin-bottom: 1rem;
+    }
+
+    .step {
+      display: none;
+    }
+
+    .step.active {
+      display: block;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(6px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 1.3rem;
+      color: var(--accent);
+    }
+
+    h3 {
+      margin-top: 0.6rem;
+      font-size: 1.05rem;
+      color: var(--text-main);
+    }
+
+    p {
+      font-size: 0.96rem;
+      line-height: 1.5;
+      text-align: justify;
+    }
+
+    ul {
+      padding-left: 1.2rem;
+      margin: 0.2rem 0 0.6rem;
+    }
+
+    li {
+      margin-bottom: 0.25rem;
+      font-size: 0.95rem;
+      text-align: justify;
+    }
+
+    .muted {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.45rem 1.1rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+      background: var(--accent);
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      box-shadow: 0 4px 10px rgba(55,71,79,0.25);
+      transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+    }
+
+    button:hover {
+      background: #263238;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(55,71,79,0.35);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 3px 6px rgba(55,71,79,0.25);
+    }
+
+    button.secondary {
+      background: #eceff1;
+      color: #37474f;
+      box-shadow: none;
+    }
+
+    button.secondary:hover {
+      background: #dde3e6;
+      box-shadow: none;
+    }
+
+    button.small {
+      padding: 0.3rem 0.8rem;
+      font-size: 0.85rem;
+    }
+
+    button[disabled] {
+      opacity: 0.5;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 70px;
+      resize: vertical;
+      padding: 0.45rem 0.55rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 0.9rem;
+      margin-top: 0.3rem;
+      font-family: inherit;
+    }
+
+    textarea:focus,
+    input[type="number"]:focus,
+    input[type="text"]:focus,
+    input[type="date"]:focus {
+      outline: none;
+      border-color: #607d8b;
+      box-shadow: 0 0 0 2px rgba(96,125,139,0.2);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+      gap: 0.8rem 1rem;
+      margin-top: 0.4rem;
+    }
+
+    .role-box {
+      border-radius: 10px;
+      border: 1px dashed #c0b39c;
+      padding: 0.6rem 0.7rem;
+      background: #f6f0e8;
+    }
+
+    .role-box.creon {
+      background: #fff3e0;
+    }
+
+    .role-box.judges {
+      background: #e3f2fd;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.12rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      background: var(--accent-soft);
+      color: #263238;
+      margin-bottom: 0.2rem;
+    }
+
+    .badge.red {
+      background: #ffccbc;
+      color: #b71c1c;
+    }
+
+    .badge.blue {
+      background: #bbdefb;
+      color: #0d47a1;
+    }
+
+    .vote-inputs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(190px,1fr));
+      gap: 0.6rem;
+      margin-top: 0.4rem;
+    }
+
+    .vote-box {
+      border-radius: 10px;
+      padding: 0.5rem 0.6rem;
+      background: #f5f5f5;
+      border: 1px dashed var(--border);
+    }
+
+    .vote-box strong {
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    input[type="number"] {
+      width: 80px;
+      padding: 0.25rem 0.35rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+
+    .vote-results {
+      margin-top: 0.6rem;
+      font-size: 0.92rem;
+    }
+
+    .bar-chart {
+      margin-top: 0.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+    }
+
+    .bar-label {
+      width: 140px;
+      text-align: right;
+      color: var(--text-muted);
+    }
+
+    .bar-track {
+      flex: 1;
+      background: #e0e0e0;
+      border-radius: 999px;
+      overflow: hidden;
+      height: 12px;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg,#37474f,#78909c);
+      min-width: 2%;
+    }
+
+    .bar-fill.alt {
+      background: linear-gradient(90deg,#b71c1c,#ef5350);
+    }
+
+    .bar-fill.neutral {
+      background: linear-gradient(90deg,#546e7a,#90a4ae);
+    }
+
+    .timer-display {
+      font-size: 1.8rem;
+      font-weight: 600;
+      text-align: center;
+      margin: 0.4rem 0 0.6rem;
+    }
+
+    .timer-display span {
+      display: inline-block;
+      min-width: 2ch;
+    }
+
+    .inline-inputs {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 0.2rem;
+    }
+
+    .inline-inputs input[type="number"] {
+      width: 70px;
+    }
+
+    .range-row {
+      margin-bottom: 0.7rem;
+    }
+
+    .range-row label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .range-row input[type="range"] {
+      width: 100%;
+    }
+
+    .hint {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+    }
+
+    /* Δυναμικά επιχειρήματα (Βήμα 4) */
+    .arg-card {
+      border-radius: 10px;
+      border: 1px dashed var(--border);
+      padding: 0.5rem 0.6rem;
+      margin-top: 0.4rem;
+      background: #f5f5f5;
+    }
+
+    .arg-card-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+      color: var(--text-muted);
+    }
+
+    /* Likert poll (Βήμα 8) */
+    .poll-block {
+      border-radius: 10px;
+      border: 1px dashed var(--border);
+      padding: 0.6rem 0.7rem;
+      background: #f5f5f5;
+      margin-bottom: 0.8rem;
+    }
+
+    .likert-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      align-items: flex-end;
+      margin-top: 0.3rem;
+    }
+
+    .likert-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.8rem;
+    }
+
+    .likert-col span {
+      margin-bottom: 0.1rem;
+    }
+
+    .likert-col input[type="number"] {
+      width: 54px;
+      text-align: center;
+      padding: 0.25rem 0.4rem;
+      margin: 0;
+    }
+
+    /* Βήμα 5 – Σενάρια & φράσεις */
+    .phrase-bank {
+      margin-top: 0.6rem;
+      border-radius: 10px;
+      border: 1px dashed var(--border);
+      padding: 0.6rem 0.7rem;
+      background: #e8f1f8;
+      font-size: 0.9rem;
+    }
+
+    .phrase-bank h4 {
+      margin: 0.2rem 0 0.2rem;
+      font-size: 0.95rem;
+      color: var(--accent);
+    }
+
+    .phrase-bank ul {
+      margin: 0.1rem 0 0.5rem;
+    }
+
+    details.scenario {
+      margin-top: 0.6rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #f5f5f5;
+      padding: 0.5rem 0.7rem 0.6rem;
+    }
+
+    details.scenario[open] {
+      background: #f1f8e9;
+      border-color: var(--accent-soft);
+    }
+
+    details.scenario summary {
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      list-style: none;
+      outline: none;
+    }
+
+    details.scenario summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .scenario-description {
+      margin-top: 0.4rem;
+      font-size: 0.94rem;
+      text-align: justify;
+    }
+
+    .scenario-notes {
+      margin-top: 0.4rem;
+    }
+
+    .scenario-notes h4 {
+      margin: 0.15rem 0 0.15rem;
+      font-size: 0.95rem;
+    }
+
+    /* Rubric κριτών (Βήμα 6) */
+    .rubric-block {
+      margin-top: 0.6rem;
+      border-radius: 14px;
+      border: 1px solid #cfd8dc;
+      padding: 0.8rem 0.9rem 0.9rem;
+      background: radial-gradient(circle at top left,#e3f2fd 0,#fafafa 40%,#ffffff 100%);
+    }
+
+    .rubric-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .rubric-title-row strong {
+      font-size: 0.98rem;
+      color: #37474f;
+    }
+
+    .rubric-badge-round {
+      padding: 0.2rem 0.7rem;
+      border-radius: 999px;
+      background: #eceff1;
+      color: #37474f;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .rubric-table {
+      margin-top: 0.6rem;
+      border-radius: 10px;
+      background: #fdfdfd;
+      padding: 0.45rem 0.55rem 0.55rem;
+    }
+
+    .rubric-row {
+      display: grid;
+      grid-template-columns: 2.4fr 0.9fr 0.9fr;
+      gap: 0.35rem 0.5rem;
+      align-items: center;
+      font-size: 0.9rem;
+      padding: 0.18rem 0;
+    }
+
+    .rubric-row.header {
+      font-weight: 600;
+      color: var(--text-main);
+      border-bottom: 1px solid #cfd8dc;
+      margin-bottom: 0.2rem;
+      padding-bottom: 0.25rem;
+    }
+
+    .rubric-row:not(.header) {
+      border-bottom: 1px dashed #e0e0e0;
+    }
+
+    .rubric-row:last-child {
+      border-bottom: none;
+    }
+
+    .rubric-col-label {
+      text-align: center;
+      font-size: 0.82rem;
+      padding: 0.18rem 0.4rem;
+      border-radius: 999px;
+    }
+
+    .rubric-col-label.antigone-col {
+      background: #e0f2f1;
+      color: #004d40;
+    }
+
+    .rubric-col-label.creon-col {
+      background: #ffe0b2;
+      color: #e65100;
+    }
+
+    .rubric-label {
+      font-size: 0.88rem;
+      color: #37474f;
+      font-weight: bold;
+      text-align: left;
+    }
+
+    .rubric-table input[type="number"] {
+      width: 56px;
+      margin: 0;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .rubric-input {
+      border-radius: 999px;
+      font-size: 0.85rem;
+      padding: 0.25rem 0.35rem;
+    }
+
+    .rubric-input-antigone {
+      background: #e0f2f1;
+      border-color: #80cbc4;
+      color: #004d40;
+    }
+
+    .rubric-input-creon {
+      background: #fff3e0;
+      border-color: #ffcc80;
+      color: #e65100;
+    }
+
+    .rubric-input-antigone:focus {
+      border-color: #26a69a;
+      box-shadow: 0 0 0 2px rgba(38,166,154,0.25);
+    }
+
+    .rubric-input-creon:focus {
+      border-color: #fb8c00;
+      box-shadow: 0 0 0 2px rgba(251,140,0,0.25);
+    }
+
+    .round-progress {
+      margin-top: 0.6rem;
+    }
+
+    .round-track {
+      width: 100%;
+      height: 14px;
+      background: linear-gradient(90deg,#e0f2f1,#fff3e0);
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .round-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg,#004d40,#e65100);
+      width: 0%;
+      transition: width 0.35s ease-out;
+    }
+
+    .round-progress-label-text {
+      margin-top: 0.25rem;
+      font-size: 0.86rem;
+      color: #37474f;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .round-results-text {
+      margin-top: 0.45rem;
+      font-size: 0.9rem;
+      color: #37474f;
+      text-align: justify;
+    }
+
+    .rubric-buttons-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.5rem;
+    }
+
+    /* Κάρτα εξωφύλλου */
+    .cover-card {
+      text-align: center;
+    }
+
+    .cover-card h2 {
+      text-align: center;
+    }
+
+    .cover-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 0.6rem;
+    }
+
+.cover-image {
+  width: 55%;
+  border-radius: 18px;
+  display: block;
+  margin: 0.4rem auto 0.4rem;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+}
+
+
+    .cover-credit {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* Κάρτα στοιχείων ομάδας */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.7rem 1rem;
+      margin-top: 0.6rem;
+    }
+
+    .info-field label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+
+    .info-field input {
+      width: 100%;
+      padding: 0.4rem 0.55rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+
+    .info-note {
+      margin-top: 0.5rem;
+    }
+
+    .no-print {
+      /* σημεία που κρύβονται στην εκτύπωση */
+    }
+
+    footer {
+      text-align: center;
+      padding: 0.7rem 0.5rem 1.3rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    #print-summary {
+      display: none;
+      padding: 1.5rem;
+      max-width: 950px;
+      margin: 0 auto;
+      font-size: 0.96rem;
+    }
+
+    #print-summary h1 {
+      font-size: 1.4rem;
+      margin-top: 0;
+      margin-bottom: 0.6rem;
+      text-align: center;
+    }
+
+    #print-summary h2 {
+      font-size: 1.1rem;
+      margin-top: 0.9rem;
+      margin-bottom: 0.3rem;
+    }
+
+    #print-summary h3 {
+      font-size: 1rem;
+      margin-top: 0.6rem;
+      margin-bottom: 0.2rem;
+    }
+
+    #print-summary p {
+      line-height: 1.4;
+      text-align: justify;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 1.35rem;
+      }
+      .card {
+        padding: 1.1rem 0.95rem;
+      }
+      .rubric-row {
+        grid-template-columns: 1.9fr 0.8fr 0.8fr;
+      }
+      .bar-label {
+        width: 110px;
+      }
+    }
+
+    /* Εκτύπωση μόνο με τα αποτελέσματα (χωρίς footer) */
+    @media print {
+      body {
+        background: #ffffff !important;
+      }
+      header,
+      main,
+      footer,
+      .no-print {
+        display: none !important;
+      }
+      #print-summary {
+        display: block !important;
+      }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="title-row">
+    <img src="greek logo.png" alt="Λογότυπο" class="site-logo">
+    <h1>Μπροστά στο νόμο</h1>
+  </div>
+  <p>Δομημένη συζήτηση για νόμο, εξουσία και ενεργό/ή πολίτη</p>
+  <div class="step-indicator" id="stepIndicator"></div>
+</header>
+
+<main>
+  <!-- Κάρτα 0 – Εξώφυλλο με law.png -->
+  <section class="card step cover-card active">
+    <p class="cover-subtitle">
+      Χρησιμοποίησε την εικόνα ως αφετηρία για μια πρώτη, ελεύθερη συζήτηση:
+      Τι παρατηρείς; Ποιες λέξεις σου έρχονται στο μυαλό; Πού βρίσκεται ο «νόμος»;
+    </p>
+    <img src="law.png" alt="Μπροστά στο νόμο – απεικόνιση χωρικού και θυρωρού" class="cover-image">
+    <p class="cover-credit muted">
+    </p>
+
+    <div class="btn-row no-print">
+      <button class="secondary" type="button" disabled>⟵ Προηγούμενο</button>
+      <button type="button" data-next>Συνέχεια ➜</button>
+    </div>
+  </section>
+
+  <!-- Κάρτα 1 – Στοιχεία ομάδας -->
+  <section class="card step">
+    <h2>Στοιχεία μαθητή/ομάδας</h2>
+    <p>
+      Πριν ξεκινήσει η δραστηριότητα, συμπληρώστε τα παρακάτω στοιχεία.
+      Αυτά θα εμφανίζονται αυτόματα στις εκτυπώσεις (επιχειρήματα, σενάρια, αποτελέσματα).
+    </p>
+
+    <div class="info-grid">
+      <div class="info-field">
+        <label for="student-name">Όνομα / Όνομα ομάδας</label>
+        <input type="text" id="student-name" placeholder="π.χ. Ομάδα Χωρικού Α ή Μαρία Κ.">
+      </div>
+      <div class="info-field">
+        <label for="student-class">Τάξη</label>
+        <input type="text" id="student-class" placeholder="π.χ. Γ1, Γ2, 3η Λυκείου">
+      </div>
+      <div class="info-field">
+        <label for="student-date">Ημερομηνία</label>
+        <input type="date" id="student-date">
+      </div>
+    </div>
+
+    <p class="info-note muted">
+      Σημείωση: Στις εκτυπώσεις η ημερομηνία θα εμφανίζεται με μορφή
+      <strong>ημέρα/μήνας/έτος (π.χ. 05/03/2026)</strong>.
+    </p>
+
+    <div class="btn-row no-print">
+      <button class="secondary" type="button" data-prev>⟵ Επιστροφή στο εξώφυλλο</button>
+      <button type="button" data-next>Έναρξη – Βήμα 1 ➜</button>
+    </div>
+  </section>
+
+  <!-- Βήμα 1 – Εισαγωγή & πλήρες κείμενο -->
+  <section class="card step">
+    <h2>Βήμα 1: Κείμενο & αφετηρία συζήτησης</h2>
+    <p>
+      Σε αυτή τη δραστηριότητα θα δουλέψουμε πάνω στην παραβολή του Φραντς Κάφκα
+      <strong>«Μπροστά στο νόμο»</strong>, για να σκεφτούμε τη σχέση ανάμεσα στον νόμο,
+      την εξουσία και τον «απλό άνθρωπο». Στα επόμενα βήματα η τάξη θα οργανώσει μια
+      δομημένη συζήτηση ανάμεσα σε δύο στάσεις:
+      <strong>την οπτική του χωρικού</strong> και
+      <strong>την οπτική του θυρωρού / «συστήματος»</strong>.
+    </p>
+
+    <h3>Το κείμενο</h3>
+    <p><strong>Μπροστά στο νόμο</strong></p>
+    <p>
+      Ο Καφκα (1883-1924), Τσέχος εβραϊκής καταγωγής που έγραψε στα γερμανικά, είναι από
+      τους σημαντικότερους συγγραφείς. Το έργο του, αγχώδες και εφιαλτικό (στα ελληνικά έχουν
+      μεταφραστεί: Η Δίκη, Ο Πύργος, Η Μεταμόρφωση, η Αμερική κ.ά.), έχει ως επίκεντρο το
+      παγιδευμένο άτομο που προσπαθεί μάταια να βρει διέξοδο και λύτρωση. Για το έργο του
+      Κάφκα έχουν δοθεί διάφορες ερμηνείες. Άλλοι το ερμηνεύουν μεταφυσικά ή θρησκευτικά με
+      βάση την απουσία και την αναζήτηση του Θεού. Άλλοι ψυχολογικά με βάση την ανασφάλεια,
+      την ασυνεννοησία ή το πλέγμα ενοχής. Άλλοι κοινωνιολογικά με βάση τη μοναξιά και την
+      αλλοτρίωση του ανθρώπου μέσα στο λαβύρινθο της γραφειοκρατίας ή της τεχνοκρατίας.
+      Γενικά το έργο του Κάφκα εκφράζει τη μοίρα του ανθρώπου που βρίσκεται σε διάσταση με
+      τον κόσμο που τον περιβάλλει, με την παράλογη λογική του και με τις μορφές εξουσίας
+      που κυριαρχούν (Θεός, πατέρας, νόμος, διευθυντής, γραφειοκρατία) και που αξιώνουν
+      απόλυτη υποταγή συντρίβοντας την ατομικότητα. Το μικρό αφήγημα που ακολουθεί το
+      βρίσκουμε και στη Δίκη, το πιο αντιπροσωπευτικό έργο του Κάφκα, και είναι ένα είδος
+      παραβολής που εκφράζει συνοπτικά το πνεύμα του συγγραφέα.
+    </p>
+
+    <p>
+      Μπροστά στο νόμο στέκει ένας θυρωρός, σ' αυτό το θυρωρό έρχεται ένας χωρικός και ζητά
+      να μπει μέσα. Μα ο θυρωρός λέει πως δεν μπορεί να τον αφήσει τώρα να μπει. Ο άνθρωπος
+      συλλογιέται και ύστερα ρωτά μήπως θα μπορούσε να μπει αργότερα. «Ίσως», λέει ο
+      θυρωρός, «τώρα όμως όχι». Η πόρτα είναι ανοιχτή όπως πάντα και καθώς παραμερίζει ο
+      θυρωρός, σκύβει ο άνθρωπος, για να κοιτάξει μέσα από την πόρτα. Μόλις το αντιλήφθηκε
+      αυτό ο θυρωρός, γελά και λέει: «Αν το τραβά η όρεξή σου, δοκίμασε να μπεις, μ' όλο
+      που σου το απαγόρεψα. Πρόσεξε όμως: είμαι δυνατός. Και δεν είμαι παρά ο πιο κάτω
+      απ' όλους τους θυρωρούς. Από αίθουσα σ' αίθουσα είναι κι άλλοι θυρωροί, ο ένας πιο
+      δυνατός από τον άλλο. Τη θέα του τρίτου μόλις, ούτ' εγώ μπορώ να την αντέξω».
+      Τέτοιες δυσκολίες δεν τις περίμενε ο χωρικός. Ο νόμος ωστόσο πρέπει να 'ναι στον
+      καθένα και πάντα προσιτός, σκέπτεται, και καθώς τώρα κοιτάζει προσεχτικά το θυρωρό,
+      τυλιγμένο στο γούνινο πανωφόρι του, τη μεγάλη σουβλερή του μύτη, τη μακριά, αραιή,
+      μαύρη, τατάρικη γενειάδα, αποφασίζει να περιμένει καλύτερα ίσαμε να πάρει την άδεια
+      να μπει.
+    </p>
+    <p>
+      Ο θυρωρός τού δίνει ένα σκαμνί και τον αφήνει να καθίσει πλάι στην πόρτα. Εκεί δα
+      κάθεται μέρες και χρόνια. Κάνει πολλές προσπάθειες να του επιτρέψουν να μπει, και
+      κουράζει το θυρωρό με τα παρακάλια του. Ο θυρωρός τού κάνει συχνά μικρορωτήματα, σαν
+      αυτά που κάνουν οι μεγάλοι κύριοι, και στο τέλος του λέει ολοένα πως δεν μπορεί ακόμα
+      να τον αφήσει να μπει. Ο άνθρωπος, που ήταν καλά εφοδιασμένος για το ταξίδι του,
+      ξόδεψε όλα, ακόμη κι ό,τι πολύτιμο είχε, σε δωροδοκίες για το θυρωρό. Εκείνος τα
+      δέχεται όλα και ύστερα λέει: «Τα δέχομαι μόνο και μόνο για να μη νομίσεις πως
+      παράλειψες τίποτα».
+    </p>
+    <p>
+      Όλα αυτά τα πολλά χρόνια ο άνθρωπος παρατηρεί το θυρωρό σχεδόν αδιάκοπα. Αποξεχνά
+      τους άλλους θυρωρούς, κι αυτός ο πρώτος τού φαίνεται το μοναδικό εμπόδιο για να μπει
+      στο νόμο. Καταριέται την κακή τύχη. Τα πρώτα χρόνια χωρίς συγκρατημό και δυνατά,
+      αργότερα, όσο γεράζει, μουρμουρίζει μόνο. Αρχίζει να παιδιαρίζει και, μια και
+      μελετώντας χρόνια το θυρωρό γνώρισε και τους ψύλλους του γούνινου γιακά του,
+      παρακαλεί και τους ψύλλους να τον βοηθήσουν και ν' αλλάξουν τη γνώμη του θυρωρού.
+      Τέλος, το φως λιγοστεύει και δεν ξέρει αν γύρω του αλήθεια σκοτεινιάζει, ή αν μονάχα
+      τα μάτια του τον απατούν. Ωστόσο, αναγνωρίζει τώρα μια λάμψη μέσα στο σκοτάδι, που
+      ξεχύνεται άσβεστη μέσα από του νόμου την πόρτα.
+    </p>
+    <p>
+      Δεν έχει πια πολλή ζωή. Πριν από το θάνατό του σμίγουν οι πείρες όλης του της ζωής σε
+      ένα ρώτημα, που δεν είχε, κάνει ως σήμερα στο θυρωρό. Του γνέφει, γιατί δεν μπορεί
+      πια ν' ανασηκώσει το ξυλιασμένο του κορμί. Ο θυρωρός πρέπει να σκύψει πολύ κοντά του,
+      γιατί το ύψος του ανθρώπου έχει πολύ αλλάξει. «Τι θες λοιπόν ακόμα να μάθεις;»
+      ρωτά ο θυρωρός, «είσαι αχόρταγος...» «Όλοι μάχονται για το νόμο», λέει ο άνθρωπος,
+      «πώς τυχαίνει να μη ζητά κανένας άλλος εκτός από μένα να μπει;» Ο θυρωρός νιώθει πως
+      ο άνθρωπος αγγίζει κιόλας στο τέλος και, για να φτάσει την ακοή του που χάνεται,
+      ουρλιάζει: «Κανένας άλλος δε μπορούσε να γίνει δεκτός εδώ, γιατί η είσοδος ήταν για
+      σένα προορισμένη. Πηγαίνω τώρα να την κλείσω.»
+    </p>
+    <p class="muted">μτφρ.: Τεα Ανεμογιαννη</p>
+
+    <h3>Πριν προχωρήσουμε…</h3>
+    <ul>
+      <li>Τι σας έκανε περισσότερο εντύπωση από τη στάση του χωρικού;</li>
+      <li>Πώς παρουσιάζεται ο νόμος μέσα από τη φιγούρα του θυρωρού;</li>
+      <li>Πόσο «ανοιχτός» ή «κλειστός» νομίζετε ότι είναι ο νόμος για τον απλό πολίτη σήμερα;</li>
+    </ul>
+    <p>
+      Στα επόμενα βήματα θα κάνουμε μια οργανωμένη συζήτηση:
+      η μία ομάδα θα πάρει τη <strong>μεριά του χωρικού</strong> και η άλλη τη
+      <strong>μεριά του θυρωρού / νόμου</strong>. Στο τέλος θα δούμε αν και πόσο άλλαξε
+      η άποψη της τάξης για τον νόμο και την πρόσβασή μας σε αυτόν.
+    </p>
+
+    <div class="btn-row no-print">
+      <button class="secondary" type="button" data-prev>⟵ Προηγούμενο</button>
+      <button type="button" data-next>Έναρξη ➜</button>
+    </div>
+  </section>
+
+  <!-- Βήμα 2 – Προ-ψηφοφορία -->
+  <section class="card step">
+    <h2>Βήμα 2: Αρχική ψηφοφορία</h2>
+    <p>
+      Πριν ξεκινήσει η συζήτηση, η τάξη τοποθετείται αυθόρμητα στο ερώτημα:
+    </p>
+    <p><strong>«Ποια στάση νιώθεις πιο κοντά στη δική σου αντίληψη για τον νόμο και τη δικαιοσύνη;»</strong></p>
+    <p class="muted">
+      Οι μαθητές/τριες ψηφίζουν με ανάταση χεριού και ο/η καθηγητής/τρια σημειώνει
+      πόσα χέρια σηκώθηκαν σε κάθε επιλογή.
+    </p>
+
+    <div class="vote-inputs">
+      <div class="vote-box">
+        <strong>Υπέρ στάσης χωρικού</strong>
+        <input type="number" id="pre-antigone" min="0" value="0">
+      </div>
+      <div class="vote-box">
+        <strong>Υπέρ στάσης θυρωρού / νόμου</strong>
+        <input type="number" id="pre-creon" min="0" value="0">
+      </div>
+      <div class="vote-box">
+        <strong>Δεν είμαι σίγουρος/η</strong>
+        <input type="number" id="pre-unsure" min="0" value="0">
+      </div>
+    </div>
+
+    <button class="small no-print" type="button" onclick="calculatePreVote()">Υπολογισμός &amp; γράφημα</button>
+
+    <div id="pre-results" class="vote-results"></div>
+    <div id="pre-chart" class="bar-chart"></div>
+
+    <div class="btn-row no-print">
+      <button class="secondary" type="button" data-prev>⟵ Προηγούμενο</button>
+      <button type="button" data-next>Επόμενο βήμα ➜</button>
+    </div>
+  </section>
+
+  <!-- Βήμα 3 – Ομάδες & Ρόλοι -->
+  <section class="card step">
+    <h2>Βήμα 3: Ομάδες &amp; ρόλοι</h2>
+    <p>
+      Η τάξη χωρίζεται σε δύο βασικές ομάδες και, αν το επιθυμείτε,
+      σε μια τρίτη ομάδα κριτών/τριών / παρατηρητών/τριών.
+    </p>
+
+    <div class="grid-2">
+      <div class="role-box">
+        <div class="badge">🚶‍♂️ Ομάδα Χωρικού</div>
+        <p>
+          Υπερασπίζεται τη στάση του <strong>χωρικού</strong>, ο οποίος διεκδικεί
+          πρόσβαση στον νόμο, ζητά εξηγήσεις και περιμένει για χρόνια μπροστά στην πόρτα.
+          Τονίζει ότι ο νόμος οφείλει να είναι <strong>πραγματικά προσιτός</strong> σε
+          όλους, χωρίς αυθαίρετα εμπόδια, και ότι ο πολίτης έχει δικαίωμα σε διαφάνεια,
+          ίση μεταχείριση και αξιοπρέπεια απέναντι στους θεσμούς.
+        </p>
+      </div>
+
+      <div class="role-box creon">
+        <div class="badge red">🚪 Ομάδα Θυρωρού / Νόμου</div>
+        <p>
+          Υπερασπίζεται τη στάση του <strong>θυρωρού</strong> και γενικότερα του
+          «συστήματος»: την ανάγκη για ιεραρχία, φίλτρα, διαδικασίες και ελέγχους
+          πριν κάποιος «φτάσει» στον νόμο. Τονίζει ότι η προστασία της τάξης, της
+          ασφάλειας και του κύρους των θεσμών μπορεί να σημαίνει ότι ο νόμος
+          <strong>δεν είναι άμεσα προσβάσιμος</strong> σε όλους.
+        </p>
+      </div>
+
+      <div class="role-box judges">
+        <div class="badge blue">⚖️ Κριτές – Παρατηρητές/τριες</div>
+        <p>
+          Παρακολουθούν το debate, σημειώνουν τα πιο πειστικά επιχειρήματα
+          και ελέγχουν αν τηρούνται οι κανόνες σεβασμού στον αντίλογο.
+        </p>
+      </div>
+    </div>
+
+    <p class="muted">
+      Μπορείτε να σημειώσετε εδώ πώς κατανεμήθηκαν οι μαθητές/τριες (προαιρετικό):
+    </p>
+    <textarea id="roles-notes" placeholder="Σύντομη σημείωση για τη σύνθεση των ομάδων..."></textarea>
+
+    <div class="btn-row no-print">
+      <button class="secondary" type="button" data-prev>⟵ Προηγούμενο</button>
+      <button type="button" data-next>Επόμενο βήμα ➜</button>
+    </div>
+  </section>
+
+  <!-- Βήμα 4 – Τράπεζα επιχειρημάτων (δυναμικά πλαίσια) -->
+  <section class="card step">
+    <h2>Βήμα 4: Τράπεζα επιχειρημάτων</h2>
+    <p>
+      Οι ομάδες προετοιμάζουν 3–5 βασικά επιχειρήματα.
+      Καθώς δουλεύετε, μπορείτε να δημιουργείτε νέα πλαίσια επιχειρημάτων εδώ.
+    </p>
+
+    <div class="grid-2">
+      <div>
+        <h3>🚶‍♂️ Επιχειρήματα Ομάδας Χωρικού</h3>
+        <div id="antigone-arguments"></div>
+        <button class="small no-print" type="button" onclick="addArgumentCard('antigone')">➕ Προσθήκη επιχειρήματος</button>
+        <p class="muted">
+          Κάθε πάτημα δημιουργεί νέο πλαίσιο με χωριστή καταγραφή επιχειρήματος.
+        </p>
+      </div>
+
+      <div>
+        <h3>🚪 Επιχειρήματα Ομάδας Θυρωρού / Νόμου</h3>
+        <div id="creon-arguments"></div>
+        <button class="small no-print" type="button" onclick="addArgumentCard('creon')">➕ Προσθήκη επιχειρήματος</button>
+        <p class="muted">
+          Κάθε πάτημα δημιουργεί νέο πλαίσιο με χωριστή καταγραφή επιχειρήματος.
+        </p>
+      </div>
+    </div>
+
+    <div class="btn-row no-print" style="margin-top:0.8rem;">
+      <button class="small secondary" type="button" onclick="printArguments()">🖨️ Αποθήκευση / Εκτύπωση επιχειρημάτων σε PDF</button>
+      <span></span>
+    </div>
+
+    <div class="btn-row no-print">
+      <button class="secondary" type="button" data-prev>⟵ Προηγούμενο</button>
+      <button type="button" data-next>Σύγχρονα παραδείγματα ➜</button>
+    </div>
+  </section>
+
+  <!-- Βήμα 5 – Σύγχρονα παραδείγματα πολιτικής ανυπακοής (σενάρια + φράσεις) -->
+  <section class="card step">
+    <h2>Βήμα 5: Σύγχρονα παραδείγματα πολιτικής ανυπακοής</h2>
+    <p>
+      <strong>Πολιτική ανυπακοή</strong> ονομάζουμε τη συνειδητή, δημόσια και ειρηνική
+      παραβίαση ενός νόμου ή κανονισμού, όταν κάποιος/κάποια θεωρεί ότι είναι βαθιά άδικος.
+      Στόχος δεν είναι η βία ή το χάος, αλλά να σταλεί ένα ξεκάθαρο μήνυμα στην κοινωνία
+      και στο κράτος, ακόμη κι αν ο/η πολίτης δεχτεί τις συνέπειες.
+    </p>
+    <p>
+      Επιλέξτε 1–2 από τα παρακάτω σενάρια και συζητήστε:
+      <em>είναι νόμιμες οι πράξεις; είναι δίκαιες; τι θα έλεγε ο χωρικός και τι ο θυρωρός;</em>
+    </p>
+
+    <button id="phrase-bank-toggle" class="small secondary no-print" type="button" onclick="togglePhraseBank()">
+      🗣️ Φράσεις για διατύπωση επιχειρημάτων
+    </button>
+
+    <div id="phrase-bank" class="phrase-bank no-print" style="display:none;">
+      <h4>Φράσεις από την οπτική «Χωρικού» (υπέρ πρόσβασης στον νόμο / αμφισβήτησης εμποδίων)</h4>
+      <ul>
+        <li>«Ο νόμος πρέπει να είναι πραγματικά προσιτός σε όλους, όχι να μένει πίσω από κλειστές πόρτες.»</li>
+        <li>«Όταν ο πολίτης δεν καταλαβαίνει τις διαδικασίες, η δικαιοσύνη γίνεται προνόμιο λίγων.»</li>
+        <li>«Η υπομονή και η νομιμότητα δεν αρκούν, όταν το ίδιο το σύστημα δεν σε αφήνει να πλησιάσεις τον νόμο.»</li>
+        <li>«Η σιωπή και η παθητικότητα ενισχύουν την αυθαιρεσία της εξουσίας.»</li>
+        <li>«Η απαίτηση για διαφάνεια και ισότητα μπροστά στον νόμο είναι δικαίωμα, όχι αγένεια.»</li>
+      </ul>
+
+      <h4>Φράσεις από την οπτική «Θυρωρού / Νόμου» (υπέρ ιεραρχίας, φίλτρων και τάξης)</h4>
+      <ul>
+        <li>«Ο νόμος δεν είναι απλή πόρτα· χρειάζεται προστασία από όσους δεν είναι έτοιμοι να τον χειριστούν.»</li>
+        <li>«Οι διαδικασίες υπάρχουν για λόγο· αν τις παρακάμψουμε, κινδυνεύει η τάξη και η ασφάλεια.»</li>
+        <li>«Δεν μπορούν όλοι να έχουν άμεση πρόσβαση – πρέπει να υπάρχουν βαθμίδες και έλεγχος.»</li>
+        <li>«Αν ο καθένας απαιτεί εξαίρεση, ο νόμος παύει να είναι νόμος.»</li>
+        <li>«Η τυπική τήρηση των κανόνων πολλές φορές είναι πιο ασφαλής από τα συναισθήματα και τις πιέσεις.»</li>
+      </ul>
+    </div>
+
+    <!-- Σενάρια -->
+    <details class="scenario" data-antigone-id="scenario1-antigone" data-creon-id="scenario1-creon">
+      <summary>🌍 Σενάριο 1 – Μαθητές/τριες μπλοκάρουν πρόσβαση σε ρυπογόνο εργοστάσιο</summary>
+      <p class="scenario-description">
+        Ομάδα μαθητών/τριών λυκείου συμμετέχει σε πανελλαδική κινητοποίηση για την προστασία
+        ενός ποταμού που ρυπαίνεται από εργοστάσιο. Οι μαθητές/τριες κάθονται συμβολικά μπροστά
+        στην είσοδο του εργοστασίου για να εμποδίσουν τα φορτηγά να μπουν και να βγουν.
+        Η αστυνομία καλεί τους/τις μαθητές/τριες να απομακρυνθούν, επικαλούμενη τον Κώδικα Οδικής
+        Κυκλοφορίας και την παρεμπόδιση της λειτουργίας της επιχείρησης. Κάποιοι γονείς
+        ανησυχούν για πιθανές νομικές συνέπειες, ενώ άλλοι στηρίζουν την πράξη.
+      </p>
+      <div class="grid-2 scenario-notes">
+        <div>
+          <h4>Οπτική Χωρικού</h4>
+          <textarea id="scenario1-antigone" placeholder="Τι θα έλεγε ο χωρικός για αυτή τη μορφή περιβαλλοντικής διαμαρτυρίας;"></textarea>
+        </div>
+        <div>
+          <h4>Οπτική Θυρωρού / Νόμου</h4>
+          <textarea id="scenario1-creon" placeholder="Τι θα έλεγε ο θυρωρός / το «σύστημα» για αυτή τη μορφή διαμαρτυρίας;"></textarea>
+        </div>
+      </div>
+    </details>
+
+    <details class="scenario" data-antigone-id="scenario2-antigone" data-creon-id="scenario2-creon">
+      <summary>👥 Σενάριο 2 – Πορεία για περιστατικά αστυνομικής βίας</summary>
+      <p class="scenario-description">
+        Μια νεανική οργάνωση για τα ανθρώπινα δικαιώματα οργανώνει ειρηνική πορεία στο
+        κέντρο της πόλης, διαμαρτυρόμενη για περιστατικά αστυνομικής βίας σε βάρος
+        προσφύγων και μεταναστών/ριών. Η πορεία έχει δηλωθεί κανονικά, αλλά σε κάποιο σημείο
+        οι διαδηλωτές/τριες κλείνουν για αρκετή ώρα την είσοδο μιας δημόσιας υπηρεσίας.
+        Κάποιοι γράφουν συνθήματα στους τοίχους. Οι φορείς της πόλης καταγγέλλουν
+        καταστροφές, ενώ οι διαδηλωτές/τριες μιλούν για «ισχυρό μήνυμα υπέρ της ανθρώπινης
+        αξιοπρέπειας».
+      </p>
+      <div class="grid-2 scenario-notes">
+        <div>
+          <h4>Οπτική Χωρικού</h4>
+          <textarea id="scenario2-antigone" placeholder="Πώς θα σχολίαζε ο χωρικός την παραβίαση κανόνων για χάρη της προστασίας των δικαιωμάτων;"></textarea>
+        </div>
+        <div>
+          <h4>Οπτική Θυρωρού / Νόμου</h4>
+          <textarea id="scenario2-creon" placeholder="Πώς θα σχολίαζε ο θυρωρός / το «σύστημα» την ίδια πράξη;"></textarea>
+        </div>
+      </div>
+    </details>
+
+    <details class="scenario" data-antigone-id="scenario3-antigone" data-creon-id="scenario3-creon">
+      <summary>🏫 Σενάριο 3 – Μαθητική διαμαρτυρία για απόφαση του σχολείου</summary>
+      <p class="scenario-description">
+        Το σχολείο αποφασίζει, χωρίς συζήτηση με το 15μελές, να ακυρώσει μια προγραμματισμένη
+        εκπαιδευτική επίσκεψη και να την αντικαταστήσει με διαγώνισμα. Μαθητές/τριες
+        αποφασίζουν να βγουν στην αυλή και να καθίσουν κάτω, αρνούμενοι/ες να μπουν στην τάξη,
+        μέχρι να συζητήσουν με τη διεύθυνση. Κάποιοι/ες θεωρούν ότι «ξεπερνούν τα όρια»,
+        άλλοι ότι «είναι ο μόνος τρόπος να ακουστούν».
+      </p>
+      <div class="grid-2 scenario-notes">
+        <div>
+          <h4>Οπτική Χωρικού</h4>
+          <textarea id="scenario3-antigone" placeholder="Τι θα έλεγε ο χωρικός για αυτή τη μορφή μαθητικής αντίδρασης;"></textarea>
+        </div>
+        <div>
+          <h4>Οπτική Θυρωρού / Νόμου</h4>
+          <textarea id="scenario3-creon" placeholder="Τι θα έλεγε ο θυρωρός / το «σύστημα» για την παραβίαση του κανονισμού;"></textarea>
+        </div>
+      </div>
+    </details>
+
+    <details class="scenario" data-antigone-id="scenario4-antigone" data-creon-id="scenario4-creon">
+      <summary>➕ Σενάριο 4 – Άλλη μορφή συλλογικής δράσης (πρόταση της τάξης)</summary>
+      <p class="scenario-description">
+        Εδώ μπορείτε να περιγράψετε ένα επιπλέον σενάριο συλλογικής δράσης που
+        προτείνει η τάξη (π.χ. μποϊκοτάζ σε προϊόν, διαδικτυακή καμπάνια,
+        αποχή από ένα μάθημα κτλ.). Περιγράψτε σύντομα τι συμβαίνει και ποιες
+        είναι οι πιθανές συνέπειες.
+      </p>
+      <textarea id="scenario4-description" placeholder="Περιγραφή σεναρίου που προτείνει η τάξη."></textarea>
+      <div class="grid-2 scenario-notes">
+        <div>
+          <h4>Οπτική Χωρικού</h4>
+          <textarea id="scenario4-antigone" placeholder="Τι θα έλεγε ο χωρικός για αυτό το σενάριο;"></textarea>
+        </div>
+        <div>
+          <h4>Οπτική Θυρωρού / Νόμου</h4>
+          <textarea id="scenario4-creon" placeholder="Τι θα έλεγε ο θυρωρός / το «σύστημα» για αυτό το σενάριο;"></textarea>
+        </div>
+      </div>
+    </details>
+
+    <div class="btn-row no-print" style="margin-top:0.8rem;">
+      <button class="small secondary" type="button" onclick="printScenarios()">🖨️ Αποθήκευση / Εκτύπωση σεναρίων σε PDF</button>
+      <span></span>
+    </div>
+
+    <div class="btn-row no-print">
+      <button class="secondary" type="button" data-prev>⟵ Προηγούμενο</button>
+      <button type="button" data-next>Debate &amp; rubric ➜</button>
+    </div>
+  </section>
+
+  <!-- Βήμα 6 – Debate + Χρονόμετρο + Rubric -->
+  <section class="card step">
+    <h2>Βήμα 6: Debate πάνω στο «Μπροστά στο νόμο»</h2>
+    <p>
+      Τώρα οι δύο ομάδες πραγματοποιούν ένα σύντομο, δομημένο debate.
+      Η μία ομάδα μιλά ως <strong>χωρικός</strong> και η άλλη ως
+      <strong>θυρωρός / νόμος</strong>. Μπορείτε να χρησιμοποιήσετε τον
+      παρακάτω χρονομετρητή για να οργανώσετε τους γύρους.
+    </p>
+
+    <h3>Χρονόμετρο ομιλητών/τριών</h3>
+    <div class="inline-inputs">
+      <label>Λεπτά: <input type="number" id="timer-minutes" min="0" value="2"></label>
+      <label>Δευτερόλεπτα: <input type="number" id="timer-seconds" min="0" value="0"></label>
+      <label>
+        Ομιλητής/τρια:
+        <select id="speaker-select">
+          <option>Χωρικός</option>
+          <option>Θυρωρός / Νόμος</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="timer-display">
+      <span id="display-min">02</span>:<span id="display-sec">00</span>
+    </div>
+    <p class="muted" id="current-speaker">Τώρα μιλά: Χωρικός</p>
+
+    <div class="btn-row no-print">
+      <button class="small" type="button" onclick="startTimer()">▶ Έναρξη</button>
+      <button class="small secondary" type="button" onclick="pauseTimer()">⏸ Παύση</button>
+      <button class="small secondary" type="button" onclick="resetTimer()">⏹ Επαναφορά</button>
+    </div>
+
+    <h3>Rubric κριτών/τριών</h3>
+    <p class="muted">
+      Οι κριτές/τριες μπορούν να αξιολογήσουν συνολικά έναν γύρο debate με βάση τα παρακάτω κριτήρια.
+      Συμπληρώστε για κάθε πλευρά έναν βαθμό από 1 έως 4:
+    </p>
+    <ul class="muted">
+      <li><strong>Χρησιμοποίησε η ομάδα συγκεκριμένα χωρία ή στοιχεία από το κείμενο;</strong></li>
+      <li><strong>Σύνδεσε τα επιχειρήματα με τη σημερινή πραγματικότητα;</strong></li>
+      <li><strong>Τήρησε τους κανόνες σεβασμού απέναντι στον αντίλογο;</strong></li>
+      <li><strong>Διατύπωσε σαφές συμπέρασμα;</strong></li>
+    </ul>
+
+    <div class="rubric-block">
+      <div class="rubric-title-row">
+        <strong>Rubric αξιολόγησης γύρου από τους/τις κριτές/τριες</strong>
+        <span class="rubric-badge-round">Κλίμακα 1–4 ανά κριτήριο</span>
+      </div>
+      <p class="muted" style="margin-top:0.3rem;">
+        1 = χρειάζεται βελτίωση, 2 = ικανοποιητικά, 3 = πολύ καλά, 4 = εξαιρετικά.
+      </p>
+
+      <div class="rubric-table">
+        <div class="rubric-row header">
+          <div>Κριτήριο</div>
+          <div class="rubric-col-label antigone-col">🚶‍♂️ Χωρικός (1–4)</div>
+          <div class="rubric-col-label creon-col">🚪 Θυρωρός / Νόμος (1–4)</div>
+        </div>
+
+        <div class="rubric-row">
+          <div class="rubric-label">Χρησιμοποίησε η ομάδα συγκεκριμένα χωρία ή στοιχεία από το κείμενο;</div>
+          <div><input class="rubric-input rubric-input-antigone" type="number" min="1" max="4" id="rubric-antigone-1"></div>
+          <div><input class="rubric-input rubric-input-creon" type="number" min="1" max="4" id="rubric-creon-1"></div>
+        </div>
+
+        <div class="rubric-row">
+          <div class="rubric-label">Σύνδεσε τα επιχειρήματα με τη σημερινή πραγματικότητα;</div>
+          <div><input class="rubric-input rubric-input-antigone" type="number" min="1" max="4" id="rubric-antigone-2"></div>
+          <div><input class="rubric-input rubric-input-creon" type="number" min="1" max="4" id="rubric-creon-2"></div>
+        </div>
+
+        <div class="rubric-row">
+          <div class="rubric-label">Τήρησε τους κανόνες σεβασμού απέναντι στον αντίλογο;</div>
+          <div><input class="rubric-input rubric-input-antigone" type="number" min="1" max="4" id="rubric-antigone-3"></div>
+          <div><input class="rubric-input rubric-input-creon" type="number" min="1" max="4" id="rubric-creon-3"></div>
+        </div>
+
+        <div class="rubric-row">
+          <div class="rubric-label">Διατύπωσε σαφές συμπέρασμα;</div>
+          <div><input class="rubric-input rubric-input-antigone" type="number" min="1" max="4" id="rubric-antigone-4"></div>
+          <div><input class="rubric-input rubric-input-creon" type="number" min="1" max="4" id="rubric-creon-4"></div>
+        </div>
+      </div>
+
+      <div class="rubric-buttons-row no-print">
+        <button class="small" type="button" onclick="calculateRoundScores()">📏 Υπολογισμός βαθμολογίας γύρου</button>
+        <button class="small secondary" type="button" onclick="printRound()">🖨️ Αποθήκευση / Εκτύπωση βαθμολογίας σε PDF</button>
+      </div>
+
+      <div id="round-results" class="round-results-text"></div>
+
+      <div class="round-progress">
+        <div class="round-track" id="round-progress-track">
+          <div class="round-fill" id="round-progress-fill"></div>
+        </div>
+        <div id="round-progress-label" class="round-progress-label-text"></div>
+      </div>
+    </div>
+
+    <textarea id="judges-notes" placeholder="Σημειώσεις κριτών/τριών / παρατηρητών/τριών (προαιρετικά)."></textarea>
+
+    <div class="btn-row no-print">
+      <button class="secondary" type="button" data-prev>⟵ Προηγούμενο</button>
+      <button type="button" data-next>Τελική ψηφοφορία ➜</button>
+    </div>
+  </section>
+
+  <!-- Βήμα 7 – Τελική ψηφοφορία & σύγκριση -->
+  <section class="card step">
+    <h2>Βήμα 7: Τελική ψηφοφορία &amp; σύγκριση</h2>
+    <p>
+      Μετά το debate, η τάξη ψηφίζει ξανά για το ίδιο ερώτημα.
+      Συγκρίνετε την εικόνα «πριν» και «μετά».
+    </p>
+
+    <div class="vote-inputs">
+      <div class="vote-box">
+        <strong>Υπέρ στάσης χωρικού (μετά)</strong>
+        <input type="number" id="post-antigone" min="0" value="0">
+      </div>
+      <div class="vote-box">
+        <strong>Υπέρ στάσης θυρωρού / νόμου (μετά)</strong>
+        <input type="number" id="post-creon" min="0" value="0">
+      </div>
+      <div class="vote-box">
+        <strong>Δεν είμαι σίγουρος/η (μετά)</strong>
+        <input type="number" id="post-unsure" min="0" value="0">
+      </div>
+    </div>
+
+    <button class="small no-print" type="button" onclick="calculatePostVote()">Υπολογισμός &amp; σύγκριση</button>
+
+    <div id="post-results" class="vote-results"></div>
+    <div id="post-chart" class="bar-chart"></div>
+
+    <div class="btn-row no-print">
+      <button class="secondary" type="button" data-prev>⟵ Προηγούμενο</button>
+      <button type="button" data-next>Προφίλ ενεργού πολίτη ➜</button>
+    </div>
+  </section>
+
+  <!-- Βήμα 8 – Προφίλ ενεργού πολίτη & συμπέρασμα (με poll) -->
+  <section class="card step">
+    <h2>Βήμα 8: Προφίλ ενεργού πολίτη &amp; συλλογικό συμπέρασμα</h2>
+    <p>
+      Πρώτα καταγράφετε τις απαντήσεις της τάξης σε 4 δηλώσεις (κλίμακα 1–5).
+      Στη συνέχεια, υπολογίζεται το «προφίλ» και ενημερώνονται αυτόματα οι δείκτες.
+    </p>
+
+    <h3>Μικρό ερωτηματολόγιο (κλίμακα 1–5)</h3>
+    <p class="muted">
+      1 = Διαφωνώ απόλυτα, 2 = Μάλλον διαφωνώ, 3 = Ούτε συμφωνώ ούτε διαφωνώ,
+      4 = Μάλλον συμφωνώ, 5 = Συμφωνώ απόλυτα.
+      Για κάθε δήλωση σημειώστε πόσοι/πόσες μαθητές/τριες διάλεξαν τον κάθε αριθμό.
+    </p>
+
+    <!-- Δήλωση 1 -->
+    <div class="poll-block">
+      <strong>1. Εμπιστοσύνη στους νόμους του κράτους</strong>
+      <p class="muted">
+        <strong>Δήλωση: «Σε γενικές γραμμές, εμπιστεύομαι ότι οι νόμοι του κράτους είναι δίκαιοι.»</strong>
+      </p>
+      <div class="likert-row">
+        <div class="likert-col">
+          <span>1</span>
+          <input type="number" id="q1-1" min="0" value="0">
+        </div>
+        <div class="likert-col">
+          <span>2</span>
+          <input type="number" id="q1-2" min="0" value="0">
+        </div>
+        <div class="likert-col">
+          <span>3</span>
+          <input type="number" id="q1-3" min="0" value="0">
+        </div>
+        <div class="likert-col">
+          <span>4</span>
+          <input type="number" id="q1-4" min="0" value="0">
+        </div>
+        <div class="likert-col">
+          <span>5</span>
+          <input type="number" id="q1-5" min="0" value="0">
+        </div>
+      </div>
+    </div>
+
+    <!-- Δήλωση 2 -->
+    <div class="poll-block">
+      <strong>2. Διάθεση αμφισβήτησης άδικων νόμων</strong>
+      <p class="muted">
+        <strong>Δήλωση: «Αν θεωρώ έναν νόμο βαθιά άδικο, θεωρώ ότι έχω ευθύνη να τον αμφισβητήσω, ακόμη κι αν υπάρξουν συνέπειες.»</strong>
+      </p>
+      <div class="likert-row">
+        <div class="likert-col">
+          <span>1</span>
+          <input type="number" id="q2-1" min="0" value="0">
+        </div>
+        <div class="likert-col">
+          <span>2</span>
+          <input type="number" id="q2-2" min="0" value="0">
+        </div>
+        <div class="likert-col">
+          <span>3</span>
+          <input type="number" id="q2-3" min="0" value="0">
+        </div>
+        <div class="likert-col">
+          <span>4</span>
+          <input type="number" id="q2-4" min="0" value="0">
+        </div>
+        <div class="likert-col">
+          <span>5</span>
+          <input type="number" id="q2-5" min="0" value="0">
+        </div>
+      </div>
+    </div>
+
+    <!-- Δήλωση 3 -->
+    <div class="poll-block">
+      <strong>3. Αίσθηση πρόσβασης στον νόμο</strong>
+      <p class="muted">
+        <strong>Δήλωση: «Αισθάνομαι ότι, αν χρειαστεί, μπορώ να βρω τον δρόμο μου μέσα στο νομικό σύστημα (πληροφόρηση, δικαιώματα, διαδικασίες).»</strong>
+      </p>
+      <div class="likert-row">
+        <div class="likert-col">
+          <span>1</span>
+          <input type="number" id="q3-1" min="0" value="0">
+        </div>
+        <div class="likert-col">
+          <span>2</span>
+          <input type="number" id="q3-2" min="0" value="0">
+        </div>
+        <div class="likert-col">
+          <span>3</span>
+          <input type="number" id="q3-3" min="0" value="0">
+        </div>
+        <div class="likert-col">
+          <span>4</span>
+          <input type="number" id="q3-4" min="0" value="0">
+        </div>
+        <div class="likert-col">
+          <span>5</span>
+          <input type="number" id="q3-5" min="0" value="0">
+        </div>
+      </div>
+    </div>
+
+    <!-- Δήλωση 4 -->
+    <div class="poll-block">
+      <strong>4. Ενεργή συμμετοχή ως πολίτης</strong>
+      <p class="muted">
+        <strong>Δήλωση: «Θα ήθελα στο μέλλον να συμμετέχω ενεργά (νόμιμα και ειρηνικά) σε συλλογικές δράσεις για κοινωνικά ή πολιτικά ζητήματα.»</strong>
+      </p>
+      <div class="likert-row">
+        <div class="likert-col">
+          <span>1</span>
+          <input type="number" id="q4-1" min="0" value="0">
+        </div>
+        <div class="likert-col">
+          <span>2</span>
+          <input type="number" id="q4-2" min="0" value="0">
+        </div>
+        <div class="likert-col">
+          <span>3</span>
+          <input type="number" id="q4-3" min="0" value="0">
+        </div>
+        <div class="likert-col">
+          <span>4</span>
+          <input type="number" id="q4-4" min="0" value="0">
+        </div>
+        <div class="likert-col">
+          <span>5</span>
+          <input type="number" id="q4-5" min="0" value="0">
+        </div>
+      </div>
+    </div>
+
+    <button class="small no-print" type="button" onclick="computeCitizenPoll()">Υπολογισμός προφίλ τάξης</button>
+
+    <p id="poll-results" class="muted" style="margin-top:0.5rem;"></p>
+
+    <h3>Δείκτες «προφίλ ενεργού πολίτη»</h3>
+    <p class="muted">
+      Με βάση τις απαντήσεις στο ερωτηματολόγιο, ρυθμίστε τους δείκτες (0–100) ώστε να
+      περιγράψουν τη γενική εικόνα της τάξης.
+    </p>
+
+    <div class="range-row">
+      <label>Εμπιστοσύνη στο νομικό σύστημα <span id="val-trust">50</span></label>
+      <input type="range" id="range-trust" min="0" max="100" value="50" oninput="updateCitizenProfile()">
+    </div>
+    <div class="range-row">
+      <label>Διάθεση αμφισβήτησης άδικων νόμων <span id="val-disobedience">50</span></label>
+      <input type="range" id="range-disobedience" min="0" max="100" value="50" oninput="updateCitizenProfile()">
+    </div>
+    <div class="range-row">
+      <label>Αίσθηση πρόσβασης &amp; ενημέρωσης <span id="val-access">50</span></label>
+      <input type="range" id="range-access" min="0" max="100" value="50" oninput="updateCitizenProfile()">
+    </div>
+    <div class="range-row">
+      <label>Διάθεση συλλογικής δράσης <span id="val-rights">50</span></label>
+      <input type="range" id="range-rights" min="0" max="100" value="50" oninput="updateCitizenProfile()">
+    </div>
+
+    <div id="citizen-summary" class="card" style="margin-top:0.7rem; padding:0.7rem 0.8rem; border-style:dashed;">
+      <p class="muted">
+        Εδώ θα εμφανίζεται μια λεκτική σύνοψη του «προφίλ ενεργού πολίτη» της τάξης,
+        με βάση τους δείκτες και τις απαντήσεις σας.
+      </p>
+    </div>
+
+    <h3>Συλλογικό συμπέρασμα της τάξης</h3>
+    <textarea id="class-summary" placeholder="2–3 προτάσεις: τι μάθαμε από την παραβολή «Μπροστά στο νόμο» για τον νόμο, την εξουσία και τη θέση του πολίτη;"></textarea>
+
+    <button class="small no-print" type="button" onclick="printResults()">🖨️ Αποθήκευση / Εκτύπωση αποτελεσμάτων σε PDF</button>
+
+    <div class="btn-row no-print">
+      <button class="secondary" type="button" data-prev>⟵ Προηγούμενο</button>
+      <button class="secondary" type="button" onclick="goToStep(0)">⬅ Επιστροφή στην αρχή</button>
+    </div>
+  </section>
+</main>
+
+<!-- Ειδική σελίδα εκτύπωσης μόνο με αποτελέσματα / επιχειρήματα / σενάρια / rubric -->
+<div id="print-summary"></div>
+
+<footer>
+  ✨✍️ Δημιουργία: Παναγιώτης Δόμβρος, Εκπαιδευτικός Αγγλικών-Θεατρολόγος, Με την Επιφύλαξη Παντός Δικαιώματος ✍️✨
+</footer>
+
+<script>
+  // --- Πλοήγηση βημάτων ---
+  const steps = Array.from(document.querySelectorAll('.step'));
+  const stepIndicator = document.getElementById('stepIndicator');
+  let currentStep = 0;
+
+  function buildStepDots() {
+    stepIndicator.innerHTML = '';
+    steps.forEach((_, idx) => {
+      const dot = document.createElement('div');
+      dot.className = 'step-dot' + (idx === 0 ? ' active' : '');
+      stepIndicator.appendChild(dot);
+    });
+  }
+
+  function updateStepDots() {
+    const dots = stepIndicator.querySelectorAll('.step-dot');
+    dots.forEach((dot, idx) => {
+      dot.classList.toggle('active', idx === currentStep);
+    });
+  }
+
+  function showStep(index) {
+    if (index < 0 || index >= steps.length) return;
+    steps.forEach((step, i) => {
+      step.classList.toggle('active', i === index);
+    });
+    currentStep = index;
+    updateStepDots();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function goToStep(index) {
+    showStep(index);
+  }
+
+  document.querySelectorAll('[data-next]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (currentStep < steps.length - 1) showStep(currentStep + 1);
+    });
+  });
+
+  document.querySelectorAll('[data-prev]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (currentStep > 0) showStep(currentStep - 1);
+    });
+  });
+
+  buildStepDots();
+
+  // --- Βοηθητικές συναρτήσεις για εκτυπώσεις (στοιχεία ομάδας + ημερομηνία) ---
+  function escapeHtml(text) {
+    if (!text) return '';
+    return text.replace(/[&<>"']/g, function (m) {
+      return {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[m];
+    });
+  }
+
+  function formatDateForPrint(value) {
+    if (!value) return '';
+    const parts = value.split('-');
+    if (parts.length !== 3) return value;
+    const [y, m, d] = parts;
+    return String(d).padStart(2, '0') + '/' +
+           String(m).padStart(2, '0') + '/' +
+           y;
+  }
+
+  function getHeaderInfoHTML() {
+    const name = (document.getElementById('student-name')?.value || '').trim();
+    const klass = (document.getElementById('student-class')?.value || '').trim();
+    const dateVal = (document.getElementById('student-date')?.value || '').trim();
+
+    if (!name && !klass && !dateVal) return '';
+
+    let html = '<p><strong>Στοιχεία ομάδας:</strong><br>';
+    if (name) {
+      html += 'Όνομα/Όνομα ομάδας: ' + escapeHtml(name) + '<br>';
+    }
+    if (klass) {
+      html += 'Τάξη: ' + escapeHtml(klass) + '<br>';
+    }
+    if (dateVal) {
+      html += 'Ημερομηνία: ' + formatDateForPrint(dateVal) + '<br>';
+    }
+    html += '</p>';
+    return html;
+  }
+
+  // --- Ψηφοφορίες ---
+  let preVote = { antigone: 0, creon: 0, unsure: 0 };
+
+  function calculatePreVote() {
+    const a = parseInt(document.getElementById('pre-antigone').value) || 0;
+    const c = parseInt(document.getElementById('pre-creon').value) || 0;
+    const u = parseInt(document.getElementById('pre-unsure').value) || 0;
+    const total = a + c + u;
+
+    preVote = { antigone: a, creon: c, unsure: u };
+
+    const resEl = document.getElementById('pre-results');
+    const chartEl = document.getElementById('pre-chart');
+
+    if (total === 0) {
+      resEl.textContent = 'Δεν έχουν καταγραφεί ψήφοι.';
+      chartEl.innerHTML = '';
+      return;
+    }
+
+    const pa = ((a / total) * 100).toFixed(1);
+    const pc = ((c / total) * 100).toFixed(1);
+    const pu = ((u / total) * 100).toFixed(1);
+
+    resEl.innerHTML =
+      `Σύνολο: <strong>${total}</strong> μαθητές/τριες – ` +
+      `Στάση χωρικού: <strong>${a}</strong> (${pa}%), ` +
+      `Στάση θυρωρού / νόμου: <strong>${c}</strong> (${pc}%), ` +
+      `Αβέβαιοι: <strong>${u}</strong> (${pu}%).`;
+
+    chartEl.innerHTML = '';
+    chartEl.appendChild(makeBarRow('Στάση χωρικού (πριν)', pa, 'antigone'));
+    chartEl.appendChild(makeBarRow('Στάση θυρωρού / νόμου (πριν)', pc, 'creon'));
+    chartEl.appendChild(makeBarRow('Αβέβαιοι (πριν)', pu, 'unsure'));
+  }
+
+  function calculatePostVote() {
+    const a = parseInt(document.getElementById('post-antigone').value) || 0;
+    const c = parseInt(document.getElementById('post-creon').value) || 0;
+    const u = parseInt(document.getElementById('post-unsure').value) || 0;
+    const total = a + c + u;
+
+    const resEl = document.getElementById('post-results');
+    const chartEl = document.getElementById('post-chart');
+
+    if (total === 0) {
+      resEl.textContent = 'Δεν έχουν καταγραφεί ψήφοι.';
+      chartEl.innerHTML = '';
+      return;
+    }
+
+    const pa = ((a / total) * 100).toFixed(1);
+    const pc = ((c / total) * 100).toFixed(1);
+    const pu = ((u / total) * 100).toFixed(1);
+
+    const diffA = a - preVote.antigone;
+    const diffC = c - preVote.creon;
+    const diffU = u - preVote.unsure;
+
+    function diffText(v) {
+      if (v > 0) return `(+${v})`;
+      if (v < 0) return `(${v})`;
+      return '(καμία μεταβολή)';
+    }
+
+    resEl.innerHTML =
+      `Σύνολο: <strong>${total}</strong> μαθητές/τριες – ` +
+      `Στάση χωρικού: <strong>${a}</strong> (${pa}%) ${diffText(diffA)}, ` +
+      `Στάση θυρωρού / νόμου: <strong>${c}</strong> (${pc}%) ${diffText(diffC)}, ` +
+      `Αβέβαιοι: <strong>${u}</strong> (${pu}%) ${diffText(diffU)}.`;
+
+    chartEl.innerHTML = '';
+    chartEl.appendChild(makeBarRow('Στάση χωρικού (μετά)', pa, 'antigone'));
+    chartEl.appendChild(makeBarRow('Στάση θυρωρού / νόμου (μετά)', pc, 'creon'));
+    chartEl.appendChild(makeBarRow('Αβέβαιοι (μετά)', pu, 'unsure'));
+  }
+
+  function makeBarRow(label, percent, type) {
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+
+    const labelEl = document.createElement('div');
+    labelEl.className = 'bar-label';
+    labelEl.textContent = `${label}`;
+
+    const track = document.createElement('div');
+    track.className = 'bar-track';
+
+    const fill = document.createElement('div');
+    fill.className = 'bar-fill';
+    if (type === 'creon') fill.classList.add('alt');
+    if (type === 'unsure') fill.classList.add('neutral');
+    fill.style.width = `${Math.max(parseFloat(percent), 0.1)}%`;
+
+    track.appendChild(fill);
+
+    const pct = document.createElement('div');
+    pct.style.width = '40px';
+    pct.style.textAlign = 'right';
+    pct.style.fontSize = '0.85rem';
+    pct.textContent = `${percent}%`;
+
+    row.appendChild(labelEl);
+    row.appendChild(track);
+    row.appendChild(pct);
+
+    return row;
+  }
+
+  // --- Δυναμικά επιχειρήματα (Βήμα 4) ---
+  function addArgumentCard(side) {
+    const containerId = side === 'antigone' ? 'antigone-arguments' : 'creon-arguments';
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const index = container.querySelectorAll('.arg-card').length + 1;
+
+    const card = document.createElement('div');
+    card.className = 'arg-card';
+
+    const title = document.createElement('div');
+    title.className = 'arg-card-title';
+    title.textContent = `Επιχείρημα ${index}`;
+    card.appendChild(title);
+
+    const t1 = document.createElement('textarea');
+    t1.placeholder = 'Σύντομη διατύπωση επιχειρήματος.';
+    card.appendChild(t1);
+
+    const t2 = document.createElement('textarea');
+    t2.placeholder = 'Στήριξη από το κείμενο (χωρίο, παραφράση).';
+    card.appendChild(t2);
+
+    const t3 = document.createElement('textarea');
+    t3.placeholder = 'Σύνδεση με σήμερα (π.χ. δικαιώματα, πρόσβαση στον νόμο, εξουσία).';
+    card.appendChild(t3);
+
+    container.appendChild(card);
+  }
+
+  // --- Χρονόμετρο debate ---
+  let timerInterval = null;
+  let remainingSeconds = 0;
+
+  function updateTimerDisplay() {
+    const min = Math.floor(remainingSeconds / 60);
+    const sec = remainingSeconds % 60;
+    document.getElementById('display-min').textContent = String(min).padStart(2, '0');
+    document.getElementById('display-sec').textContent = String(sec).padStart(2, '0');
+  }
+
+  function startTimer() {
+    const min = parseInt(document.getElementById('timer-minutes').value) || 0;
+    const sec = parseInt(document.getElementById('timer-seconds').value) || 0;
+    remainingSeconds = min * 60 + sec;
+
+    const speaker = document.getElementById('speaker-select').value;
+    document.getElementById('current-speaker').textContent = 'Τώρα μιλά: ' + speaker;
+
+    if (remainingSeconds <= 0) {
+      alert('Ορίστε έναν χρόνο μεγαλύτερο του μηδενός.');
+      return;
+    }
+
+    if (timerInterval) {
+      clearInterval(timerInterval);
+    }
+
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+      remainingSeconds--;
+      updateTimerDisplay();
+      if (remainingSeconds <= 0) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        alert('Τέλος χρόνου για τον/την ομιλητή/τρια!');
+      }
+    }, 1000);
+  }
+
+  function pauseTimer() {
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+  }
+
+  function resetTimer() {
+    pauseTimer();
+    remainingSeconds = (parseInt(document.getElementById('timer-minutes').value) || 2) * 60 +
+                       (parseInt(document.getElementById('timer-seconds').value) || 0);
+    updateTimerDisplay();
+  }
+
+  document.getElementById('speaker-select').addEventListener('change', (e) => {
+    document.getElementById('current-speaker').textContent = 'Τώρα μιλά: ' + e.target.value;
+  });
+
+  // --- Toggle phrase bank (Βήμα 5) ---
+  function togglePhraseBank() {
+    const box = document.getElementById('phrase-bank');
+    if (!box) return;
+    box.style.display = (box.style.display === 'none' || box.style.display === '') ? 'block' : 'none';
+  }
+
+  // --- Υπολογισμός βαθμολογίας γύρου (rubric) ---
+  function gatherRoundStats() {
+    let totalA = 0;
+    let totalC = 0;
+    let countA = 0;
+    let countC = 0;
+
+    for (let i = 1; i <= 4; i++) {
+      const a = parseInt(document.getElementById('rubric-antigone-' + i)?.value) || 0;
+      const c = parseInt(document.getElementById('rubric-creon-' + i)?.value) || 0;
+      if (a > 0) {
+        totalA += a;
+        countA++;
+      }
+      if (c > 0) {
+        totalC += c;
+        countC++;
+      }
+    }
+    return { totalA, totalC, countA, countC };
+  }
+
+  function calculateRoundScores() {
+    const { totalA, totalC, countA, countC } = gatherRoundStats();
+    const maxPerSide = (countA || countC) * 4;
+    const resultsEl = document.getElementById('round-results');
+    const fill = document.getElementById('round-progress-fill');
+    const label = document.getElementById('round-progress-label');
+
+    if (!countA && !countC) {
+      resultsEl.textContent = 'Δεν έχουν καταγραφεί βαθμολογίες.';
+      fill.style.width = '0%';
+      label.textContent = '';
+      return;
+    }
+
+    let winner = 'Ισοπαλία';
+    let percent = 50;
+
+    if (totalA > totalC) {
+      winner = 'Ομάδα χωρικού';
+      percent = 50 + Math.min(40, ((totalA - totalC) / (maxPerSide || 1)) * 100);
+    } else if (totalC > totalA) {
+      winner = 'Ομάδα θυρωρού / νόμου';
+      percent = 50 - Math.min(40, ((totalC - totalA) / (maxPerSide || 1)) * 100);
+    }
+
+    resultsEl.innerHTML =
+      `Συνολική βαθμολογία – Χωρικός: <strong>${totalA}</strong> / ${maxPerSide || '—'}, ` +
+      `Θυρωρός / νόμος: <strong>${totalC}</strong> / ${maxPerSide || '—'}. ` +
+      `Νικητής γύρου (βάσει rubric): <strong>${winner}</strong>.`;
+
+    const width = (percent / 100) * 100;
+    fill.style.width = width + '%';
+    if (winner === 'Ομάδα χωρικού') {
+      fill.style.background = 'linear-gradient(90deg,#004d40,#26a69a)';
+    } else if (winner === 'Ομάδα θυρωρού / νόμου') {
+      fill.style.background = 'linear-gradient(90deg,#e65100,#ff8f00)';
+    } else {
+      fill.style.background = 'linear-gradient(90deg,#546e7a,#90a4ae)';
+    }
+
+    label.textContent =
+      winner === 'Ισοπαλία'
+        ? 'Ισοπαλία μεταξύ των δύο πλευρών.'
+        : `Προβάδισμα: ${winner}.`;
+  }
+
+  // --- Συλλογή επιχειρημάτων για εκτύπωση ---
+  function collectArgumentsForPrint(side) {
+    const containerId = side === 'antigone' ? 'antigone-arguments' : 'creon-arguments';
+    const container = document.getElementById(containerId);
+    if (!container) return [];
+
+    const cards = container.querySelectorAll('.arg-card');
+    const items = [];
+
+    cards.forEach(card => {
+      const fields = card.querySelectorAll('textarea');
+      if (!fields.length) return;
+      const text = (fields[0].value || '').trim();
+      const support = (fields[1].value || '').trim();
+      const modern = (fields[2].value || '').trim();
+
+      const parts = [];
+      if (text) parts.push(text);
+      if (support) parts.push('Τεκμηρίωση: ' + support);
+      if (modern) parts.push('Σύνδεση με σήμερα: ' + modern);
+
+      if (parts.length) {
+        items.push(parts.join(' — '));
+      }
+    });
+
+    return items;
+  }
+
+  // --- Εκτύπωση ΜΟΝΟ επιχειρημάτων (Βήμα 4) ---
+  function printArguments() {
+    const container = document.getElementById('print-summary');
+    let html = '';
+
+    html += '<h1>Μπροστά στο νόμο – Τράπεζα Επιχειρημάτων</h1>';
+    html += getHeaderInfoHTML();
+
+    const antItems = collectArgumentsForPrint('antigone');
+    const creItems = collectArgumentsForPrint('creon');
+
+    if (!antItems.length && !creItems.length) {
+      html += '<p>Δεν έχουν καταγραφεί επιχειρήματα.</p>';
+    } else {
+      if (antItems.length) {
+        html += '<h2>Επιχειρήματα Ομάδας Χωρικού</h2><ul>';
+        antItems.forEach(item => {
+          html += '<li>' + item.replace(/\n/g, '<br>') + '</li>';
+        });
+        html += '</ul>';
+      }
+      if (creItems.length) {
+        html += '<h2>Επιχειρήματα Ομάδας Θυρωρού / Νόμου</h2><ul>';
+        creItems.forEach(item => {
+          html += '<li>' + item.replace(/\n/g, '<br>') + '</li>';
+        });
+        html += '</ul>';
+      }
+    }
+
+    container.innerHTML = html;
+    window.print();
+  }
+
+  // --- Εκτύπωση ΜΟΝΟ σεναρίων (Βήμα 5) ---
+  function printScenarios() {
+    const container = document.getElementById('print-summary');
+    let html = '';
+
+    html += '<h1>Μπροστά στο νόμο – Σενάρια πολιτικής ανυπακοής</h1>';
+    html += getHeaderInfoHTML();
+
+    const scenarioDetails = document.querySelectorAll('details.scenario');
+
+    if (!scenarioDetails.length) {
+      html += '<p>Δεν υπάρχουν διαθέσιμα σενάρια.</p>';
+    } else {
+      scenarioDetails.forEach((det, index) => {
+        const summaryEl = det.querySelector('summary');
+        const title = summaryEl ? summaryEl.textContent.trim() : `Σενάριο ${index + 1}`;
+
+        const descEls = det.querySelectorAll('.scenario-description');
+        let descText = '';
+        descEls.forEach(p => {
+          const t = (p.textContent || '').trim();
+          if (t) {
+            descText += (descText ? ' ' : '') + t;
+          }
+        });
+
+        const antigoneId = det.dataset.antigoneId;
+        const creonId = det.dataset.creonId;
+
+        const antigoneText = antigoneId
+          ? (document.getElementById(antigoneId)?.value || '').trim()
+          : '';
+        const creonText = creonId
+          ? (document.getElementById(creonId)?.value || '').trim()
+          : '';
+
+        html += `<h2>${title}</h2>`;
+        if (descText) {
+          html += `<p>${descText}</p>`;
+        }
+
+        if (index === 3) {
+          const extraDesc = (document.getElementById('scenario4-description')?.value || '').trim();
+          if (extraDesc) {
+            html += '<h3>Περιγραφή σεναρίου από την τάξη</h3>';
+            html += '<p>' + extraDesc.replace(/\n/g, '<br>') + '</p>';
+          }
+        }
+
+        if (antigoneText || creonText) {
+          if (antigoneText) {
+            html += '<h3>Οπτική Χωρικού</h3><p>' +
+                    antigoneText.replace(/\n/g, '<br>') + '</p>';
+          }
+          if (creonText) {
+            html += '<h3>Οπτική Θυρωρού / Νόμου</h3><p>' +
+                    creonText.replace(/\n/g, '<br>') + '</p>';
+          }
+        } else {
+          html += '<p><em>Δεν έχουν καταγραφεί ακόμη θέσεις για αυτό το σενάριο.</em></p>';
+        }
+      });
+    }
+
+    container.innerHTML = html;
+    window.print();
+  }
+
+  // --- Strip HTML helper για εκτύπωση αποτελεσμάτων ---
+  function stripHtml(html) {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || '';
+  }
+
+  // --- Δημιουργία ειδικής σελίδας βαθμολογίας γύρου & εκτύπωση ---
+  function printRound() {
+    const container = document.getElementById('print-summary');
+    let html = '';
+
+    html += '<h1>Μπροστά στο νόμο – Βαθμολογία γύρου debate</h1>';
+    html += getHeaderInfoHTML();
+
+    const { totalA, totalC, countA, countC } = gatherRoundStats();
+    const maxPerSide = (countA || countC) * 4;
+
+    if (!countA && !countC) {
+      html += '<p>Δεν έχουν καταγραφεί βαθμολογίες από τους/τις κριτές/τριες.</p>';
+    } else {
+      html += '<h2>Συνολική εικόνα</h2>';
+      html += `<p>Χωρικός: ${totalA} / ${maxPerSide}. ` +
+              `Θυρωρός / νόμος: ${totalC} / ${maxPerSide}.</p>`;
+
+      html += '<h2>Αναλυτικά ανά κριτήριο</h2><ol>';
+      const criteriaTexts = [
+        'Χρησιμοποίησε η ομάδα συγκεκριμένα χωρία ή στοιχεία από το κείμενο;',
+        'Σύνδεσε τα επιχειρήματα με τη σημερινή πραγματικότητα;',
+        'Τήρησε τους κανόνες σεβασμού απέναντι στον αντίλογο;',
+        'Διατύπωσε σαφές συμπέρασμα;'
+      ];
+
+      for (let i = 1; i <= 4; i++) {
+        const a = parseInt(document.getElementById('rubric-antigone-' + i)?.value) || 0;
+        const c = parseInt(document.getElementById('rubric-creon-' + i)?.value) || 0;
+        if (a === 0 && c === 0) continue;
+        html += `<li><strong>${criteriaTexts[i - 1]}</strong><br>` +
+                `Χωρικός: ${a || '—'} / 4 &nbsp;–&nbsp; Θυρωρός / νόμος: ${c || '—'} / 4</li>`;
+      }
+      html += '</ol>';
+    }
+
+    const notes = (document.getElementById('judges-notes')?.value || '').trim();
+    if (notes) {
+      html += '<h2>Σημειώσεις κριτών/τριών</h2>';
+      html += '<p>' + notes.replace(/\n/g, '<br>') + '</p>';
+    }
+
+    container.innerHTML = html;
+    window.print();
+  }
+
+  // --- Υπολογισμός προφίλ (Likert) ---
+  function computeCitizenPoll() {
+    function avgForQuestion(prefix) {
+      let sum = 0;
+      let count = 0;
+      for (let i = 1; i <= 5; i++) {
+        const v = parseInt(document.getElementById(prefix + '-' + i)?.value) || 0;
+        sum += v * i;
+        count += v;
+      }
+      return count ? (sum / count).toFixed(2) : null;
+    }
+
+    const a1 = avgForQuestion('q1');
+    const a2 = avgForQuestion('q2');
+    const a3 = avgForQuestion('q3');
+    const a4 = avgForQuestion('q4');
+
+    let text = 'Μέσες τιμές (1–5): ';
+    const parts = [];
+    if (a1) parts.push(`Εμπιστοσύνη στους νόμους: ${a1}`);
+    if (a2) parts.push(`Αμφισβήτηση άδικων νόμων: ${a2}`);
+    if (a3) parts.push(`Αίσθηση πρόσβασης: ${a3}`);
+    if (a4) parts.push(`Διάθεση συλλογικής δράσης: ${a4}`);
+
+    text += parts.length ? parts.join(' · ') : 'Δεν υπάρχουν ακόμη δεδομένα.';
+    document.getElementById('poll-results').textContent = text;
+
+    updateCitizenProfile();
+  }
+
+  // --- Λεκτική περιγραφή προφίλ ενεργού πολίτη ---
+  function updateCitizenProfile() {
+    const trust = parseInt(document.getElementById('range-trust')?.value) || 0;
+    const dis = parseInt(document.getElementById('range-disobedience')?.value) || 0;
+    const access = parseInt(document.getElementById('range-access')?.value) || 0;
+    const rights = parseInt(document.getElementById('range-rights')?.value) || 0;
+
+    document.getElementById('val-trust').textContent = trust;
+    document.getElementById('val-disobedience').textContent = dis;
+    document.getElementById('val-access').textContent = access;
+    document.getElementById('val-rights').textContent = rights;
+
+    const summaryEl = document.getElementById('citizen-summary');
+    if (!summaryEl) return;
+
+    let description = '';
+
+    if (trust >= 60 && access >= 60) {
+      description += 'Η τάξη φαίνεται να έχει σχετικά υψηλή εμπιστοσύνη στο νομικό σύστημα και να νιώθει ότι έχει τρόπους πρόσβασης και ενημέρωσης. ';
+    } else if (trust <= 40 && access <= 40) {
+      description += 'Η τάξη δείχνει χαμηλή εμπιστοσύνη στο νομικό σύστημα και αισθάνεται μάλλον μακριά από την πραγματική πρόσβαση στον νόμο. ';
+    } else {
+      description += 'Η εικόνα για τον νόμο και την πρόσβαση σε αυτόν είναι μικτή: υπάρχουν και στοιχεία εμπιστοσύνης και στοιχεία επιφύλαξης. ';
+    }
+
+    if (dis >= 60 && rights >= 60) {
+      description += 'Ταυτόχρονα, φαίνεται έντονη διάθεση για κριτική σκέψη απέναντι σε άδικους νόμους και για ενεργή, συλλογική δράση. ';
+    } else if (dis <= 40 && rights <= 40) {
+      description += 'Η διάθεση για αμφισβήτηση άδικων νόμων και για συλλογική δράση εμφανίζεται μάλλον περιορισμένη. ';
+    } else {
+      description += 'Η διάθεση για αμφισβήτηση άδικων νόμων και για συλλογική δράση είναι μέτρια και διαφέρει από μαθητή/τρια σε μαθητή/τρια. ';
+    }
+
+    description += 'Η παραβολή «Μπροστά στο νόμο» μπορεί να αποτελέσει αφορμή για να σκεφτούμε πώς θέλουμε να είναι ο νόμος στο μέλλον: πραγματικά ανοιχτός σε όλους ή κλειστός πίσω από «θυρωρούς».';
+
+    summaryEl.innerHTML = '<p>' + description + '</p>';
+  }
+
+  // --- Δημιουργία ειδικής σελίδας αποτελεσμάτων & εκτύπωση (ολόκληρη δραστηριότητα) ---
+  function printResults() {
+    const container = document.getElementById('print-summary');
+    let html = '';
+
+    html += '<h1>Μπροστά στο νόμο – Αποτελέσματα Δραστηριότητας</h1>';
+    html += getHeaderInfoHTML();
+
+    // Αρχική ψηφοφορία
+    const preText = stripHtml(document.getElementById('pre-results').innerHTML || '').trim();
+    if (preText) {
+      html += '<h2>Αρχική ψηφοφορία</h2><p>' + preText + '</p>';
+    }
+
+    // Τελική ψηφοφορία
+    const postText = stripHtml(document.getElementById('post-results').innerHTML || '').trim();
+    if (postText) {
+      html += '<h2>Τελική ψηφοφορία</h2><p>' + postText + '</p>';
+    }
+
+    // Ερωτηματολόγιο
+    const pollText = (document.getElementById('poll-results').textContent || '').trim();
+    if (pollText) {
+      html += '<h2>Ερωτηματολόγιο – Προφίλ ενεργού πολίτη</h2><p>' + pollText + '</p>';
+    }
+
+    // Λεκτική σύνοψη προφίλ
+    const citizenText = stripHtml(document.getElementById('citizen-summary').innerHTML || '').trim();
+    if (citizenText) {
+      html += '<h3>Λεκτική σύνοψη προφίλ</h3><p>' + citizenText + '</p>';
+    }
+
+    // Συλλογικό συμπέρασμα
+    const classSummary = (document.getElementById('class-summary').value || '').trim();
+    if (classSummary) {
+      html += '<h2>Συλλογικό συμπέρασμα της τάξης</h2><p>' +
+              classSummary.replace(/\n/g, '<br>') + '</p>';
+    }
+
+    container.innerHTML = html;
+    window.print();
+  }
+
+  // --- Αρχικοποίηση κατά τη φόρτωση ---
+  window.addEventListener('DOMContentLoaded', () => {
+    addArgumentCard('antigone');
+    addArgumentCard('creon');
+    resetTimer();
+    updateCitizenProfile();
+  });
+</script>
+</body>
+</html>
